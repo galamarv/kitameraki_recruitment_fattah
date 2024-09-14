@@ -37,6 +37,7 @@ Create a .env file in the root directory and add your MongoDB connection string:
 MONGO_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
 PORT=3000
 ```
+Replace `<username>`, `<password>`, and `<dbname>` with your actual MongoDB Atlas credentials.
 
 ## Running the Application
 
