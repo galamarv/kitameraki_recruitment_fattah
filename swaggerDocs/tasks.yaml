@@ -1,0 +1,260 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Task Management API
+  description: API for managing tasks
+
+paths:
+  /api/tasks:
+    get:
+      summary: Get all tasks
+      description: Retrieve a list of tasks with optional filters and pagination.
+      tags:
+        - Tasks
+      parameters:
+        - name: status
+          in: query
+          description: Filter by task status
+          required: false
+          schema:
+            type: string
+            enum: [pending, in progress, completed]
+        - name: priority
+          in: query
+          description: Filter by task priority
+          required: false
+          schema:
+            type: string
+            enum: [low, medium, high]
+        - name: limit
+          in: query
+          description: Limit the number of tasks returned (pagination)
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: skip
+          in: query
+          description: Skip the first N tasks (pagination)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    dueDate:
+                      type: string
+                      format: date-time
+                    priority:
+                      type: string
+                      enum: [low, medium, high]
+                    status:
+                      type: string
+                      enum: [pending, in progress, completed]
+                    subtasks:
+                      type: array
+                      items:
+                        type: string
+
+    post:
+      summary: Create a new task
+      description: Add a new task to the system.
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - dueDate
+                - priority
+                - status
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                dueDate:
+                  type: string
+                  format: date-time
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                status:
+                  type: string
+                  enum: [pending, in progress, completed]
+                subtasks:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  dueDate:
+                    type: string
+                    format: date-time
+                  priority:
+                    type: string
+                    enum: [low, medium, high]
+                  status:
+                    type: string
+                    enum: [pending, in progress, completed]
+                  subtasks:
+                    type: array
+                    items:
+                      type: string
+
+  /api/tasks/{id}:
+    get:
+      summary: Get task by ID
+      description: Retrieve a single task by its ID.
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The task ID.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  dueDate:
+                    type: string
+                    format: date-time
+                  priority:
+                    type: string
+                    enum: [low, medium, high]
+                  status:
+                    type: string
+                    enum: [pending, in progress, completed]
+                  subtasks:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Task not found
+
+    patch:
+      summary: Update a task by ID
+      description: Update the details of a task.
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The task ID.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                dueDate:
+                  type: string
+                  format: date-time
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                status:
+                  type: string
+                  enum: [pending, in progress, completed]
+                subtasks:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  dueDate:
+                    type: string
+                    format: date-time
+                  priority:
+                    type: string
+                    enum: [low, medium, high]
+                  status:
+                    type: string
+                    enum: [pending, in progress, completed]
+                  subtasks:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Task not found
+
+    delete:
+      summary: Delete a task by ID
+      description: Remove a task from the system.
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The task ID.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task deleted successfully
+        '404':
+          description: Task not found
