@@ -1,0 +1,7 @@
+{
+     "watch": ["server.js", "controllers/", "routes/", "config/", "validation/"],
+     "ext": "js,json",
+     "ignore": ["node_modules/"],
+     "exec": "node --inspect server.js"
+   }
+   
